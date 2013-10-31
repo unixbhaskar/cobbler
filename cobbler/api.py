@@ -839,8 +839,7 @@ class BootAPI:
             if arch == "x86":
                 # be consistent
                 arch = "i386"
-            if path.split("-")[-1] != arch:
-                path += ("-%s" % arch)
+            path += ("-%s" % arch)
 
         # we need to mirror (copy) the files
         self.log("importing from a network location, running rsync to fetch the files first")

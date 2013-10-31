@@ -353,6 +353,6 @@ class Replicate:
         self.replicate_data()
         self.link_distros()
         self.logger.info("Syncing")
-        self.api.sync(logger=self.logger)
+        self.api.sync()
         self.logger.info("Done")
         return True

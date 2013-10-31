@@ -27,7 +27,6 @@ import glob
 import time
 import random
 import os
-from threading import Lock
 
 import action_litesync
 import item_system
@@ -50,7 +49,6 @@ class Collection:
         self.clear()
         self.api = self.config.api
         self.lite_sync = None
-        self.lock = Lock()
 
     def factory_produce(self,config,seed_data):
         """
@@ -95,11 +93,9 @@ class Collection:
         if len(kargs) == 1 and kargs.has_key("name") and not return_list:
             return self.listing.get(kargs["name"].lower(), None)
 
-        self.lock.acquire()
         for (name, obj) in self.listing.iteritems():
             if obj.find_match(kargs, no_errors=no_errors):
                 matches.append(obj)
-        self.lock.release()
 
         if not return_list:
             if len(matches) == 0:
@@ -152,9 +148,7 @@ class Collection:
         """
         Serialize the collection
         """
-        self.lock.acquire()
         datastruct = [x.to_datastruct() for x in self.listing.values()]
-        self.lock.release()
         return datastruct
 
     def from_datastruct(self,datastruct):

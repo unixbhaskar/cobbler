@@ -195,7 +195,7 @@ class RepoSync:
                     mdoptions.append("-g %s" % groupmdfile)
                 if rmd.repoData.has_key("prestodelta"):
                     # need createrepo >= 0.9.7 to add deltas
-                    if utils.check_dist() in ("redhat","fedora","centos","scientific linux","suse"):
+                    if utils.check_dist() == "redhat" or utils.check_dist() == "suse":
                         cmd = "/usr/bin/rpmquery --queryformat=%{VERSION} createrepo"
                         createrepo_ver = utils.subprocess_get(self.logger, cmd)
                         if createrepo_ver >= "0.9.7":
@@ -536,8 +536,6 @@ class RepoSync:
         config_file = open(fname, "w+")
         config_file.write("[%s]\n" % repo.name)
         config_file.write("name=%s\n" % repo.name)
-        config_file.write("exclude=%s\n" % repo.yumopts['exclude'])
-        self.logger.debug("excluding: %s" % repo.yumopts['exclude'])
         optenabled = False
         optgpgcheck = False
         if output:

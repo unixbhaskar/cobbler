@@ -49,6 +49,8 @@ import utils
 from utils import _
 import configgen
 
+# FIXME: make configurable?
+TOKEN_TIMEOUT = 60*60 # 60 minutes
 EVENT_TIMEOUT = 7*24*60*60 # 1 week
 CACHE_TIMEOUT = 10*60 # 10 minutes
 
@@ -1022,8 +1024,7 @@ class CobblerXMLRPCInterface:
         self._log("generate_kickstart")
         try:
             return self.api.generate_kickstart(profile,system)
-        except Exception, e:
-            utils.log_exc(self.logger)
+        except:
             return "# This kickstart had errors that prevented it from being rendered correctly.\n# The cobbler.log should have information relating to this failure."
 
     def generate_gpxe(self,profile=None,system=None,**rest):
@@ -1548,11 +1549,9 @@ class CobblerXMLRPCInterface:
                 if c:
                     hash["mgmt_classes"][m] = c.to_datastruct()
 
-            if distro is None and profile.COLLECTION_TYPE == "image":
+            if distro is None and profile.COLLECTION_TYPE == "profile":
                 image_based = True
                 arch = profile.arch
-            else:
-                arch = distro.arch
 
             if obj.is_management_supported():
                 if not image_based:
@@ -1708,7 +1707,7 @@ class CobblerXMLRPCInterface:
         timenow = time.time()
         for token in self.token_cache.keys():
             (tokentime, user) = self.token_cache[token]
-            if (timenow > tokentime + self.api.settings().auth_token_expiration):
+            if (timenow > tokentime + TOKEN_TIMEOUT):
                 self._log("expiring token",token=token,debug=True)
                 del self.token_cache[token]
         # and also expired objects
