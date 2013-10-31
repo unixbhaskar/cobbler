@@ -93,9 +93,19 @@ class Collection:
         if len(kargs) == 1 and kargs.has_key("name") and not return_list:
             return self.listing.get(kargs["name"].lower(), None)
 
+<<<<<<< HEAD
         for (name, obj) in self.listing.iteritems():
             if obj.find_match(kargs, no_errors=no_errors):
                 matches.append(obj)
+=======
+        self.lock.acquire()
+        try:
+            for (name, obj) in self.listing.iteritems():
+                if obj.find_match(kargs, no_errors=no_errors):
+                    matches.append(obj)
+        finally:
+            self.lock.release()
+>>>>>>> 2447b008ed0b67e44e7c90bf9aa90b29241848bf
 
         if not return_list:
             if len(matches) == 0:
@@ -312,14 +322,22 @@ class Collection:
 
         if not save:
             # don't need to run triggers, so add it already ...
-            self.listing[ref.name.lower()] = ref
+            self.lock.acquire()
+            try:
+                self.listing[ref.name.lower()] = ref
+            finally:
+                self.lock.release()
 
         # perform filesystem operations
         if save:
             # failure of a pre trigger will prevent the object from being added
             if with_triggers:
                 utils.run_triggers(self.api, ref,"/var/lib/cobbler/triggers/add/%s/pre/*" % self.collection_type(), [], logger)
-            self.listing[ref.name.lower()] = ref
+            self.lock.acquire()
+            try:
+                self.listing[ref.name.lower()] = ref
+            finally:
+                self.lock.release()
 
             # save just this item if possible, if not, save
             # the whole collection

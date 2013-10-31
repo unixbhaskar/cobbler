@@ -214,6 +214,7 @@ class CobblerXMLRPCInterface:
                 self.options.get("prune", False),
                 self.options.get("omit_data", False),
                 self.options.get("sync_all", False),
+                self.options.get("use_ssl", False),
                 self.logger
             )
         return self.__start_task(runner, token, "replicate", "Replicate", options)
@@ -1076,6 +1077,15 @@ class CobblerXMLRPCInterface:
         """
         self._log("get_valid_breeds",token=token)
         results = utils.get_valid_breeds()
+        results.sort()
+        return self.xmlrpc_hacks(results)
+
+    def get_valid_os_versions_for_breed(self,breed,token=None,**rest):
+        """
+        Return the list of valid os_versions for the given breed
+        """
+        self._log("get_valid_os_versions_for_breed",token=token)
+        results = utils.get_valid_os_versions_for_breed(breed)
         results.sort()
         return self.xmlrpc_hacks(results)
 

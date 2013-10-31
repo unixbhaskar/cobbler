@@ -18,7 +18,7 @@
     "boot_files":[]
    },
    "rhel5": {
-    "signatures":["RedHat","Server","CentOS"],
+    "signatures":["RedHat","Server","CentOS","Client"],
     "version_file":"(redhat|sl|centos)-release-5([^\\.][\\w]*)?[\\.-]+(.*)\\.rpm",
     "version_file_regex":null,
     "kernel_arch":"kernel-(.*).rpm",
@@ -96,6 +96,22 @@
     "kernel_options":"repo=$tree",
     "kernel_options_post":"",
     "boot_files":[]
+   },
+   "fedora19": {
+    "signatures":["Packages"],
+    "version_file":"(fedora)-release-19-(.*)\\.noarch\\.rpm",
+    "version_file_regex":null,
+    "kernel_arch":"kernel-(.*)\\.rpm",
+    "kernel_arch_regex":null,
+    "supported_arches":["i386","x86_64","ppc","ppc64"],
+    "supported_repo_breeds":["rsync", "rhn", "yum"],
+    "kernel_file":"vmlinuz(.*)",
+    "initrd_file":"initrd(.*)\\.img",
+    "isolinux_ok":false,
+    "default_kickstart":"/var/lib/cobbler/kickstarts/sample_end.ks",
+    "kernel_options":"repo=$tree",
+    "kernel_options_post":"",
+    "boot_files":[]
    }
   },
   "debian": {
@@ -134,9 +150,9 @@
   },
   "ubuntu": {
    "lucid": {
-    "signatures":["dists"],
-    "version_file":"Release",
-    "version_file_regex":"Codename: lucid",
+    "signatures":["dists", ".disk"],
+    "version_file":"Release|mini-info",
+    "version_file_regex":"Codename: lucid|Ubuntu 10.04",
     "kernel_arch":"linux-headers-(.*)\\.deb",
     "kernel_arch_regex":null,
     "supported_arches":["i386","amd64"],
@@ -166,9 +182,9 @@
     "boot_files":[]
    },
    "precise": {
-    "signatures":["dists"],
-    "version_file":"Release",
-    "version_file_regex":"Codename: precise",
+    "signatures":["dists", ".disk"],
+    "version_file":"Release|mini-info",
+    "version_file_regex":"Codename: precise|Ubuntu 12.04",
     "kernel_arch":"linux-headers-(.*)\\.deb",
     "kernel_arch_regex":null,
     "supported_arches":["i386","amd64"],
@@ -182,9 +198,9 @@
     "boot_files":[]
    },
    "quantal": {
-    "signatures":["dists"],
-    "version_file":"Release",
-    "version_file_regex":"Codename: quantal",
+    "signatures":["dists", ".disk"],
+    "version_file":"Release|mini-info",
+    "version_file_regex":"Codename: quantal|Ubuntu 12.10",
     "kernel_arch":"linux-headers-(.*)\\.deb",
     "kernel_arch_regex":null,
     "supported_arches":["i386","amd64"],
@@ -198,9 +214,25 @@
     "boot_files":[]
    },
    "raring": {
-    "signatures":["dists"],
-    "version_file":"Release",
-    "version_file_regex":"Codename: raring",
+    "signatures":["dists", ".disk"],
+    "version_file":"Release|mini-info",
+    "version_file_regex":"Codename: raring|Ubuntu 13.04",
+    "kernel_arch":"linux-headers-(.*)\\.deb",
+    "kernel_arch_regex":null,
+    "supported_arches":["i386","amd64"],
+    "supported_repo_breeds":["apt"],
+    "kernel_file":"linux(.*)",
+    "initrd_file":"initrd(.*)\\.gz",
+    "isolinux_ok":false,
+    "default_kickstart":"/var/lib/cobbler/kickstarts/sample.seed",
+    "kernel_options":"",
+    "kernel_options_post":"",
+    "boot_files":[]
+   },
+   "saucy": {
+    "signatures":["dists", ".disk"],
+    "version_file":"Release|mini-info",
+    "version_file_regex":"Codename: saucy|Ubuntu 13.10",
     "kernel_arch":"linux-headers-(.*)\\.deb",
     "kernel_arch_regex":null,
     "supported_arches":["i386","amd64"],
@@ -342,22 +374,6 @@
     "kernel_options":"install=$tree",
     "kernel_options_post":"",
     "boot_files":[]
-   },
-   "sles11sp3": {
-    "signatures":["suse"],
-    "version_file":"sles-release-11.3-(.*).rpm",
-    "version_file_regex":null,
-    "kernel_arch":"kernel-(.*)\\.rpm",
-    "kernel_arch_regex":null,
-    "supported_arches":["i386","i586","x86_64","ppc64"],
-    "supported_repo_breeds":["yum"],
-    "kernel_file":"linux[64.gz]?",
-    "initrd_file":"initrd[64]?",
-    "isolinux_ok":false,
-    "default_kickstart":"/var/lib/cobbler/kickstarts/sample_autoyast.xml",
-    "kernel_options":"",
-    "kernel_options_post":"",
-    "boot_files":[]
    }
   },
   "vmware": {
@@ -407,6 +423,7 @@
     "default_kickstart":"/var/lib/cobbler/kickstarts/sample_esxi5.ks",
     "kernel_options":"",
     "kernel_options_post":"",
+    "template_files":"/etc/cobbler/pxe/bootcfg_esxi5.template=$local_img_path/cobbler-boot.cfg",
     "boot_files":["*.*"]
    },
    "esxi51": {
@@ -423,23 +440,7 @@
     "default_kickstart":"/var/lib/cobbler/kickstarts/sample_esxi5.ks",
     "kernel_options":"",
     "kernel_options_post":"",
-    "boot_files":["*.*"]
-   },
-   "esxi55": {
-    "signatures":["tboot.b00"],
-    "version_file":"s\\.v00",
-    "version_file_regex":"^.*ESXi 5\\.5\\.(.*)build-([\\d]+).*$",
-    "kernel_arch":"tools\\.t00",
-    "kernel_arch_regex":"^.*(x86_64).*$",
-    "supported_arches":["x86_64"],
-    "supported_repo_breeds":[],
-    "kernel_file":"mboot\\.c32",
-    "initrd_file":"imgpayld\\.tgz",
-    "isolinux_ok":false,
-    "default_kickstart":"/var/lib/cobbler/kickstarts/sample_esxi5.ks",
-    "kernel_options":"",
-    "kernel_options_post":"",
-    "template_files":"/etc/cobbler/pxe/bootcfg_esxi55.template=$local_img_path/cobbler-boot.cfg",
+    "template_files":"/etc/cobbler/pxe/bootcfg_esxi51.template=$local_img_path/cobbler-boot.cfg",
     "boot_files":["*.*"]
    }
   },
@@ -476,6 +477,22 @@
     "kernel_options_post":"",
     "boot_files":[]
    },
+   "8.4": {
+    "signatures":["boot"],
+    "version_file":"8\\.4-RELEASE",
+    "version_file_regex":null,
+    "kernel_arch":"device\\.hints",
+    "kernel_arch_regex":"^.*FreeBSD: src/sys/(.*)/conf/GENERIC\\.hints.*$",
+    "supported_arches":["i386","amd64"],
+    "supported_repo_breeds":[],
+    "kernel_file":"pxeboot(.*)",
+    "initrd_file":"mfsroot\\.gz",
+    "isolinux_ok":false,
+    "default_kickstart":"",
+    "kernel_options":"",
+    "kernel_options_post":"",
+    "boot_files":[]
+   },   
    "9.0": {
     "signatures":["boot"],
     "version_file":"device\\.hints",
