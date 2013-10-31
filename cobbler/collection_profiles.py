@@ -68,11 +68,7 @@ class Profiles(collection.Collection):
             if with_delete:
                 if with_triggers: 
                     utils.run_triggers(self.config.api, obj, "/var/lib/cobbler/triggers/delete/profile/pre/*", [], logger)
-            self.lock.acquire()
-            try:
-                del self.listing[name]
-            finally:
-                self.lock.release()
+            del self.listing[name]
             self.config.serialize_delete(self, obj)
             if with_delete:
                 if with_triggers: 

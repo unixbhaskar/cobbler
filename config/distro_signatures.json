@@ -342,22 +342,6 @@
     "kernel_options":"install=$tree",
     "kernel_options_post":"",
     "boot_files":[]
-   },
-   "sles11sp3": {
-    "signatures":["suse"],
-    "version_file":"sles-release-11.3-(.*).rpm",
-    "version_file_regex":null,
-    "kernel_arch":"kernel-(.*)\\.rpm",
-    "kernel_arch_regex":null,
-    "supported_arches":["i386","i586","x86_64","ppc64"],
-    "supported_repo_breeds":["yum"],
-    "kernel_file":"linux[64.gz]?",
-    "initrd_file":"initrd[64]?",
-    "isolinux_ok":false,
-    "default_kickstart":"/var/lib/cobbler/kickstarts/sample_autoyast.xml",
-    "kernel_options":"",
-    "kernel_options_post":"",
-    "boot_files":[]
    }
   },
   "vmware": {
@@ -423,23 +407,6 @@
     "default_kickstart":"/var/lib/cobbler/kickstarts/sample_esxi5.ks",
     "kernel_options":"",
     "kernel_options_post":"",
-    "boot_files":["*.*"]
-   },
-   "esxi55": {
-    "signatures":["tboot.b00"],
-    "version_file":"s\\.v00",
-    "version_file_regex":"^.*ESXi 5\\.5\\.(.*)build-([\\d]+).*$",
-    "kernel_arch":"tools\\.t00",
-    "kernel_arch_regex":"^.*(x86_64).*$",
-    "supported_arches":["x86_64"],
-    "supported_repo_breeds":[],
-    "kernel_file":"mboot\\.c32",
-    "initrd_file":"imgpayld\\.tgz",
-    "isolinux_ok":false,
-    "default_kickstart":"/var/lib/cobbler/kickstarts/sample_esxi5.ks",
-    "kernel_options":"",
-    "kernel_options_post":"",
-    "template_files":"/etc/cobbler/pxe/bootcfg_esxi55.template=$local_img_path/cobbler-boot.cfg",
     "boot_files":["*.*"]
    }
   },

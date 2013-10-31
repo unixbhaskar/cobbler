@@ -36,6 +36,7 @@ import item_distro
 import item_profile
 import item_repo
 import item_system
+import codes
 
 from utils import _
 
@@ -180,7 +181,7 @@ class ImportRedhatManager:
 
     # required function for import modules
     def get_valid_os_versions(self):
-        return utils.get_valid_os_versions_for_breed("redhat")
+        return codes.VALID_OS_VERSIONS["redhat"]
 
     def get_valid_repo_breeds(self):
         return ["rsync", "rhn", "yum",]
@@ -762,6 +763,11 @@ class ImportRedhatManager:
         """
 
         if flavor == "fedora":
+
+            # this may actually fail because the libvirt/virtinst database
+            # is not always up to date.  We keep a simplified copy of this
+            # in codes.py.  If it fails we set it to something generic
+            # and don't worry about it.
 
             try:
                 os_version = "fedora%s" % int(major)

@@ -1330,7 +1330,7 @@ class Koan:
 
         hashv = utils.input_string_or_hash(kextra)
 
-        if self.static_interface is not None and (breed == "redhat" or breed == "suse" or breed == "debian" or breed == "ubuntu"):
+        if self.static_interface is not None and (breed == "redhat" or breed == "suse"):
             interface_name = self.static_interface
             interfaces = self.safe_load(pd, "interfaces")
             if interface_name.startswith("eth"):
@@ -1344,25 +1344,6 @@ class Koan:
             gateway = self.safe_load(pd, "gateway")
             dns = self.safe_load(pd, "name_servers")
 
-            if breed == "debian" or breed == "ubuntu":
-                hostname = self.safe_load(pd, "hostname")
-                name = self.safe_load(pd, "name")
-
-                if hostname != "" or name != "":
-                    if hostname != "":
-                        # if this is a FQDN, grab the first bit
-                        my_hostname = hostname.split(".")[0]
-                        _domain = hostname.split(".")[1:]
-                        if _domain:
-                           my_domain = ".".join(_domain)
-                    else:
-                        my_hostname = name.split(".")[0]
-                        _domain = name.split(".")[1:]
-                        if _domain:
-                           my_domain = ".".join(_domain)
-                    hashv["hostname"] = my_hostname
-                    hashv["domain"] = my_domain
-
             if breed == "suse":
                 hashv["netdevice"] = self.static_interface
             else:
@@ -1370,25 +1351,15 @@ class Koan:
             if ip is not None:
                 if breed == "suse":
                     hashv["hostip"] = ip
-                elif breed == "debian" or breed == "ubuntu":
-                    hashv["netcfg/get_ipaddress"] = ip
                 else:
                     hashv["ip"] = ip
             if netmask is not None:
-                if breed == "debian" or breed == "ubuntu":
-                    hashv["netcfg/get_netmask"] = netmask
-                else:
-                    hashv["netmask"] = netmask
+                hashv["netmask"] = netmask
             if gateway is not None:
-                if breed == "debian" or breed == "ubuntu":
-                    hashv["netcfg/get_gateway"] = gateway
-                else:
-                    hashv["gateway"] = gateway
+                hashv["gateway"] = gateway
             if dns is not None:
                 if breed == "suse":
                     hashv["nameserver"] = dns[0]
-                elif breed == "debian" or breed == "ubuntu":
-                    hashv["netcfg/get_nameservers"] = " ".join(dns)
                 else:
                     hashv["dns"] = ",".join(dns)
 
@@ -1872,7 +1843,8 @@ class Koan:
 
                 # check whether we have SELinux enabled system
                 args = "/usr/sbin/selinuxenabled"
-                if os.path.exists(args) and sub_process.call(args) == 0:
+                selinuxenabled = sub_process.call(args)
+                if selinuxenabled == 0:
                     # required context type
                     context_type = "virt_image_t"
 
